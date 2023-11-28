@@ -76,17 +76,53 @@ def parse(player_list, min_height, age_min, age_max, player_foot, sub_position, 
                        age))
 
 
-# TO DO: insert merge sort code here
-# pass in the list "players" as the parameter
 def mergeSort(unsortedList):
-    pass
-    # add the merge sort code in here
+    if len(unsortedList) > 1:
+        middle = len(unsortedList) // 2
+        left_portion = unsortedList[:middle]
+        right_portion = unsortedList[middle:]
+
+        mergeSort(left_portion)
+        mergeSort(right_portion)
+
+        i = j = k = 0
+
+        while i < len(left_portion) and j < len(right_portion):
+            if left_portion[i].highestValue < right_portion[j].highestValue:
+                unsortedList[k] = left_portion[i]
+                i = i + 1
+            else:
+                unsortedList[k] = right_portion[j]
+                j = j + 1
+            k = k + 1
+        while i < len(left_portion):
+            unsortedList[k] = left_portion[i]
+            i = i + 1
+            k = k + 1
+        while j < len(right_portion):
+            unsortedList[k] = right_portion[j]
+            j = j + 1
+            k = k + 1
 
 
-# TO DO: insert quick sort code here
+
+# adapted pseudocode from following tutorial to write the quick function: https://www.youtube.com/watch?v=7h1s2SojIRw
 def quickSort(unsortedList):
-    pass
-    # add the quick sort code in here
+    def quick(array, first_index, second_index):
+        if first_index < second_index:
+            pivot = array[second_index].highestValue
+            i = first_index - 1
+            for j in range(first_index, second_index):
+                if array[j].highestValue < pivot:
+                    i = i + 1
+                    array[i], array[j] = array[j], array[i]
+
+            array[i + 1], array[second_index] = array[second_index], array[i + 1]
+            pivot_index = i + 1
+            quick(array, first_index, pivot_index - 1)
+            quick(array, pivot_index + 1, second_index)
+
+    quick(unsortedList, 0, len(unsortedList) - 1)
 
 
 if __name__ == '__main__':
@@ -284,13 +320,18 @@ if __name__ == '__main__':
     # create the list of players based on user's preferences
     parse(players, height, minAge, maxAge, footNum, subNum, posNum, budget)
 
-    # TO DO: print the time it took to sort the list of players meeting criteria using Quick and Merge sorts
+    mergeSort(players)
+    quickSort(players)
+    mstime = timeit.timeit(stmt='mergeSort(players)', setup='pass', number=1, globals=globals())
+    qstime = timeit.timeit(stmt='quickSort(players)', setup='pass', number=1, globals=globals())
     print()
     print("---------------------------------------------------------")
     print("Listed below are the players that meet your criteria:")
     print("---------------------------------------------------------")
-    print("(It took X seconds to sort the list of players in order of ascending maximum market value using Quick Sort)")
-    print("(It took Y seconds to sort the list of players in order of ascending maximum market value using Merge Sort)")
+    print(
+        f"(It took {qstime} seconds to sort the list of players in order of ascending maximum market value using Quick Sort)")
+    print(
+        f"(It took {mstime} seconds to sort the list of players in order of ascending maximum market value using Merge Sort)")
 
     # prints the sorted list of players
     print()
