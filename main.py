@@ -76,6 +76,8 @@ def parse(player_list, min_height, age_min, age_max, player_foot, sub_position, 
                        age))
 
 
+
+# adapted pseudocode from following tutorial to write the merge function: https://www.youtube.com/watch?v=TzeBrDU-JaY
 def mergeSort(unsortedList):
     if len(unsortedList) > 1:
         middle = len(unsortedList) // 2
@@ -320,6 +322,7 @@ if __name__ == '__main__':
     # create the list of players based on user's preferences
     parse(players, height, minAge, maxAge, footNum, subNum, posNum, budget)
 
+    # measures and prints the execution time of each sorting algorithm for a concrete comparison
     mergeSort(players)
     quickSort(players)
     mstime = timeit.timeit(stmt='mergeSort(players)', setup='pass', number=1, globals=globals())
