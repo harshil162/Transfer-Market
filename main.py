@@ -1,11 +1,14 @@
+import copy
+import timeit
+
 from player import *
 import csv
 
 # Referenced Corey Schafer's tutorial to parse in python
 # https://www.youtube.com/watch?v=q5uM4VKywbA
 # reads the csv file, filtering user preferences and appending players to the list of players
-def parse(player_list, min_height, age_min, age_max, player_foot, sub_position, position, max_price):
-    with open('testValues.csv', 'r') as csv_file:
+def parse(player_list, ms_player_list, qs_player_list, min_height, age_min, age_max, player_foot, sub_position, position, max_price):
+    with open('players.csv', 'r') as csv_file:
         csv_reader = csv.reader(csv_file)
         next(csv_reader)
         for line in csv_reader:
@@ -71,8 +74,17 @@ def parse(player_list, min_height, age_min, age_max, player_foot, sub_position, 
                     continue
                 if position==4 and pos!="Goalkeeper":
                     continue
+            # appending to a list in python is amortized O(1)
             player_list.append(
                 Player(name, birth_country, citizenship, sub_pos, pos, value, curr_club, id_num, foot, prev_season, player_height,
+                       age))
+            ms_player_list.append(
+                Player(name, birth_country, citizenship, sub_pos, pos, value, curr_club, id_num, foot, prev_season,
+                       player_height,
+                       age))
+            qs_player_list.append(
+                Player(name, birth_country, citizenship, sub_pos, pos, value, curr_club, id_num, foot, prev_season,
+                       player_height,
                        age))
 
 
@@ -107,7 +119,6 @@ def mergeSort(unsortedList):
             k = k + 1
 
 
-
 # adapted pseudocode from following tutorial to write the quick function: https://www.youtube.com/watch?v=7h1s2SojIRw
 def quickSort(unsortedList):
     def quick(array, first_index, second_index):
@@ -131,8 +142,9 @@ if __name__ == '__main__':
     # players is the list that holds all the player values
     players = []
 
-    # sorted players is the list that holds list of players sorted in ascending value
-    sortedPlayers = []
+    # initializing the lists to be passed into sorting functions
+    msPlayers = []
+    qsPlayers = []
 
     # sets initial values for preference variables
     height = -1
@@ -141,6 +153,10 @@ if __name__ == '__main__':
     footNum = -1
     subNum = -1
     posNum = -1
+
+    # initializes the timer variables for the merge and quick sort functions
+    qstime = 0
+    mstime = 0
 
     print("---------------------------------------------")
     print("Welcome to the Football Club Transfer Market!")
@@ -320,13 +336,10 @@ if __name__ == '__main__':
                 print("~WARNING: Please type a positive integer")
 
     # create the list of players based on user's preferences
-    parse(players, height, minAge, maxAge, footNum, subNum, posNum, budget)
+    parse(players, msPlayers, qsPlayers, height, minAge, maxAge, footNum, subNum, posNum, budget)
 
-    # measures and prints the execution time of each sorting algorithm for a concrete comparison
-    mergeSort(players)
-    quickSort(players)
-    mstime = timeit.timeit(stmt='mergeSort(players)', setup='pass', number=1, globals=globals())
-    qstime = timeit.timeit(stmt='quickSort(players)', setup='pass', number=1, globals=globals())
+    mstime = timeit.timeit(stmt='mergeSort(msPlayers)', setup='pass', number=1, globals=globals())
+    qstime = timeit.timeit(stmt='quickSort(qsPlayers)', setup='pass', number=1, globals=globals())
     print()
     print("---------------------------------------------------------")
     print("Listed below are the players that meet your criteria:")
@@ -338,6 +351,5 @@ if __name__ == '__main__':
 
     # prints the sorted list of players
     print()
-    sortedPlayers = mergeSort(players)
-    for player in sortedPlayers:
+    for player in msPlayers:
         print("Player Cost: ", player.highestValue, " | Name: ", player.name, " | ID: ", player.id, " | Age: ", player.age, " | Position: ", player.position, " | Sub-Position: ", player.subPosition, " | Foot: ", player.foot, " | Height: ", player.height, " | Country of Birth: ", player.birthCountry, " | Country of Citizenship: ", player.citizenship, " | Last Season: ", player.prevSeason)
