@@ -88,7 +88,6 @@ def parse(player_list, ms_player_list, qs_player_list, min_height, age_min, age_
                        age))
 
 
-
 # adapted pseudocode from following tutorial to write the merge function: https://www.youtube.com/watch?v=TzeBrDU-JaY
 def mergeSort(unsortedList):
     if len(unsortedList) > 1:
@@ -136,7 +135,6 @@ def quickSort(unsortedList):
             quick(array, pivot_index + 1, second_index)
 
     quick(unsortedList, 0, len(unsortedList) - 1)
-
 
 if __name__ == '__main__':
     # players is the list that holds all the player values
