@@ -94,13 +94,14 @@ def mergeSort(unsortedList):
         middle = len(unsortedList) // 2
         left_portion = unsortedList[:middle]
         right_portion = unsortedList[middle:]
-
+        
         mergeSort(left_portion)
         mergeSort(right_portion)
 
         i = j = k = 0
-
-        while i < len(left_portion) and j < len(right_portion):
+        numInLeft = len(left_portion)
+        numInRight = len(right_portion)
+        while i < numInLeft and j < numInRight:
             if left_portion[i].highestValue < right_portion[j].highestValue:
                 unsortedList[k] = left_portion[i]
                 i = i + 1
@@ -108,11 +109,11 @@ def mergeSort(unsortedList):
                 unsortedList[k] = right_portion[j]
                 j = j + 1
             k = k + 1
-        while i < len(left_portion):
+        while i < numInLeft:
             unsortedList[k] = left_portion[i]
             i = i + 1
             k = k + 1
-        while j < len(right_portion):
+        while j < numInRight:
             unsortedList[k] = right_portion[j]
             j = j + 1
             k = k + 1
